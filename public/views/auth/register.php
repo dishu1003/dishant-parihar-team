@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../../../includes/config.php';
 require_once __DIR__ . '/../../../includes/router.php';
 require_once __DIR__ . '/../../../includes/auth.php';
+require_once __DIR__ . '/../../../includes/csrf.php';
 
 start_secure_session();
 
@@ -49,7 +50,7 @@ include __DIR__ . '/../partials/header.php';
                 <input type="text" id="city" name="city" class="form-control" required>
             </div>
 
-            <input type="hidden" name="csrf_token" value="<?php echo e($csrf_token); ?>">
+            <?php echo CSRF::getInputField(); ?>
 
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-block">Create Account</button>

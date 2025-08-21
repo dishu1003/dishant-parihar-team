@@ -15,13 +15,11 @@ start_secure_session();
 CSRF::verifyRequest();
 
 // 3. Get and sanitize input
-$input = json_decode(file_get_contents('php://input'), true);
-
-$name = sanitize_string($input['name'] ?? '');
-$email = filter_var($input['email'] ?? '', FILTER_VALIDATE_EMAIL);
-$password = $input['password'] ?? '';
-$phone = sanitize_string($input['phone'] ?? '');
-$city = sanitize_string($input['city'] ?? '');
+$name = sanitize_string($_POST['name'] ?? '');
+$email = filter_var($_POST['email'] ?? '', FILTER_VALIDATE_EMAIL);
+$password = $_POST['password'] ?? '';
+$phone = sanitize_string($_POST['phone'] ?? '');
+$city = sanitize_string($_POST['city'] ?? '');
 
 // 4. Validate input
 if (empty($name) || !$email || empty($password) || empty($phone) || empty($city)) {
