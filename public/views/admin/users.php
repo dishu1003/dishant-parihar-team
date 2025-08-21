@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const tableBody = document.getElementById('users-table-body');
         const token = '<?php echo $_SESSION["csrf_token"]; ?>';
 
-        fetch('/api/admin/users/list.php', {
+        fetch('/api/users/admin_list.php', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

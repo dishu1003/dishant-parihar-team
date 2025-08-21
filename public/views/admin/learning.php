@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- Fetch and Render Modules ---
     async function fetchModules() {
         try {
-            const response = await apiFetch('/api/admin/learning/list.php');
+            const response = await apiFetch('/api/learning/admin_list.php');
             if (response.success) {
                 renderTable(response.data);
             } else {
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const id = module.id;
         const isEditMode = !!id;
-        const url = isEditMode ? `/api/admin/learning/update.php?id=${id}` : '/api/admin/learning/create.php';
+        const url = isEditMode ? `/api/learning/admin_update.php?id=${id}` : '/api/learning/admin_create.php';
 
         try {
             const response = await apiFetch(url, {
@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     window.openEditModal = async function(id) {
         try {
-            const response = await apiFetch(`/api/admin/learning/get.php?id=${id}`);
+            const response = await apiFetch(`/api/learning/admin_get.php?id=${id}`);
             if (response.success) {
                 openModal('edit', response.data);
             } else {
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         try {
-            const response = await apiFetch('/api/admin/learning/delete.php', {
+            const response = await apiFetch('/api/learning/admin_delete.php', {
                 method: 'POST',
                 body: JSON.stringify({ id: id })
             });
