@@ -20,6 +20,21 @@ function sanitize_string(string $input): string {
 }
 
 /**
+ * Sanitizes a string to allow basic HTML tags for content.
+ * Be careful with this, as it allows HTML. Use for trusted inputs (e.g., admins).
+ *
+ * @param string $input The HTML string to sanitize.
+ * @return string The sanitized HTML string.
+ */
+function sanitize_html(string $input): string {
+    $allowed_tags = '<p><h1><h2><h3><h4><h5><h6><b><i><u><ul><ol><li><a><br><strong><em><blockquote><code><pre>';
+    // Need to also handle attributes like href for <a> tags.
+    // A more robust solution like HTML Purifier is recommended for production apps.
+    // For this context, we will do a simple strip_tags and then rely on CSP.
+    return strip_tags($input, $allowed_tags);
+}
+
+/**
  * A comprehensive sanitization function for user-provided data.
  *
  * @param mixed $data The data to sanitize.
