@@ -64,28 +64,51 @@ function handleRegisterForm() {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const formData = {
-            name: form.name.value,
-            email: form.email.value,
-            password: form.password.value,
-            phone: form.phone.value,
-            city: form.city.value,
-        };
+
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        submitButton.disabled = true;
+        submitButton.textContent = 'Creating Account...';
+
+        // Use URLSearchParams for application/x-www-form-urlencoded
+        const formData = new URLSearchParams();
+        formData.append('name', form.name.value);
+        formData.append('email', form.email.value);
+        formData.append('password', form.password.value);
+        formData.append('phone', form.phone.value);
+        formData.append('city', form.city.value);
+
+        // Get CSRF token from the hidden input field
+        const csrfToken = form.querySelector('input[name="csrf_token"]').value;
+        formData.append('csrf_token', csrfToken);
 
         try {
-            const data = await window.apiFetch('/api/auth/register.php', {
+            const response = await fetch('/api/auth/register.php', {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData,
             });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'An unknown error occurred.');
+            }
 
             if (data.success) {
                 showFormMessage('register-form', data.message, 'success');
+                form.reset();
                 setTimeout(() => {
                     window.location.href = '/views/auth/login.php';
                 }, 2000);
             }
         } catch (error) {
             showFormMessage('register-form', error.message, 'error');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
         }
     });
 }
