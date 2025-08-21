@@ -1,7 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../includes/config.php';
 require_once __DIR__ . '/../../../includes/router.php';
-require_once __DIR__ . '/../../../includes/auth.php';
 
 start_secure_session();
 
