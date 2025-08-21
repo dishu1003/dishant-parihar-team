@@ -1,7 +1,9 @@
 -- Asclepius Wellness - Automated Income System
 -- Database Schema
--- Version: 1.0
+-- Version: 1.1
 -- Author: Jules, Senior Full-Stack Engineer
+-- Changelog:
+-- v1.1: Added indexes for performance, added timestamps to learning_modules, fixed resources.uploaded_by nullability.
 
 SET NAMES utf8mb4;
 SET time_zone = '+00:00';
@@ -27,7 +29,8 @@ CREATE TABLE `users` (
   `is_active` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '0 = inactive, 1 = active',
   `force_password_reset` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  KEY `role` (`role`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -56,7 +59,9 @@ CREATE TABLE `tasks` (
   `xp_reward` INT UNSIGNED NOT NULL DEFAULT 10,
   `is_daily` TINYINT(1) NOT NULL DEFAULT 1 COMMENT '1 for tasks that appear daily',
   `is_active` TINYINT(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `type` (`type`),
+  KEY `is_daily` (`is_daily`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -123,8 +128,12 @@ CREATE TABLE `learning_modules` (
   `pdf_url` VARCHAR(255) DEFAULT NULL,
   `order_no` INT NOT NULL DEFAULT 0,
   `is_active` TINYINT(1) NOT NULL DEFAULT 1,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `slug` (`slug`)
+  UNIQUE KEY `slug` (`slug`),
+  KEY `category` (`category`),
+  KEY `is_active` (`is_active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -158,7 +167,8 @@ CREATE TABLE `announcements` (
   `starts_at` DATETIME NOT NULL,
   `ends_at` DATETIME NOT NULL,
   `is_active` TINYINT(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `active_period` (`is_active`,`starts_at`,`ends_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -175,6 +185,8 @@ CREATE TABLE `community_posts` (
   `is_approved` TINYINT(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
+  KEY `is_pinned` (`is_pinned`),
+  KEY `is_approved` (`is_approved`),
   CONSTRAINT `community_posts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -207,10 +219,11 @@ CREATE TABLE `resources` (
   `file_path` VARCHAR(255) NOT NULL,
   `mime_type` VARCHAR(100) NOT NULL,
   `size` INT UNSIGNED NOT NULL COMMENT 'in bytes',
-  `uploaded_by` INT UNSIGNED NOT NULL,
+  `uploaded_by` INT UNSIGNED DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `uploaded_by` (`uploaded_by`),
+  KEY `category` (`category`),
   CONSTRAINT `resources_ibfk_1` FOREIGN KEY (`uploaded_by`) REFERENCES `users` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -225,7 +238,8 @@ CREATE TABLE `events` (
   `start_at` DATETIME NOT NULL,
   `location` VARCHAR(255) DEFAULT NULL,
   `is_active` TINYINT(1) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `is_active` (`is_active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
