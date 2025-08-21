@@ -1,0 +1,12 @@
+{
+    "name": "dishant-parihar-team/asclepius-wellness-system",
+    "description": "Asclepius Wellness - Automated Income System",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Jules",
+            "role": "Senior Full-Stack Engineer"
+        }
+    ],
+    "require": {}
+}
