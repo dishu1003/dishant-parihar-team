@@ -1,0 +1,774 @@
+/**
+ * Main Stylesheet for Asclepius Wellness HQ
+ * Author: Jules, Senior Full-Stack Engineer
+ * Version: 1.0
+ */
+
+/* --- 1. Design System & Variables --- */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap');
+
+:root {
+    /* Colors */
+    --color-dark-blue: #002147;
+    --color-gold: #FFD700;
+    --color-white: #FFFFFF;
+    --color-dark-green: #006400;
+    --color-black: #000000;
+    --color-light-gray: #f4f7f6;
+    --color-medium-gray: #e1e1e1;
+    --color-dark-gray: #555;
+    --color-text: #333;
+    --color-success: #28a745;
+    --color-error: #dc3545;
+    --color-warning: #ffc107;
+    --color-hot: #ff4136;
+    --color-warm: #ff851b;
+    --color-cold: #0074d9;
+
+    /* Fonts */
+    --font-primary: 'Montserrat', sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+
+    /* Shadows & Borders */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+
+    /* Transitions */
+    --transition-fast: all 0.2s ease-in-out;
+}
+
+/* --- 2. Dark Mode Theme --- */
+[data-theme="dark"] {
+    --color-light-gray: #1a1a1a;
+    --color-medium-gray: #2a2a2a;
+    --color-dark-gray: #aaa;
+    --color-text: #f0f0f0;
+    --color-white: #0f0f0f;
+    --color-black: #ffffff;
+}
+
+/* --- 3. Base & Reset --- */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--color-light-gray);
+    color: var(--color-text);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex-grow: 1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+}
+
+a {
+    color: var(--color-dark-blue);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+[data-theme="dark"] a {
+    color: var(--color-gold);
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* --- 4. Utility Classes --- */
+.text-center { text-align: center; }
+.text-gold { color: var(--color-gold); }
+.bg-dark-blue { background-color: var(--color-dark-blue); }
+.hidden { display: none; }
+.section-title {
+    font-size: 2rem;
+    color: var(--color-dark-blue);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+[data-theme="dark"] .section-title {
+    color: var(--color-gold);
+}
+
+/* --- 5. Buttons --- */
+.btn {
+    display: inline-block;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-family: var(--font-primary);
+    font-weight: 700;
+    border-radius: var(--border-radius);
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    text-align: center;
+}
+
+.btn-primary {
+    background-color: var(--color-gold);
+    color: var(--color-dark-blue);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-dark-blue);
+    color: var(--color-gold);
+    border-color: var(--color-gold);
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: var(--color-dark-blue);
+    border-color: var(--color-dark-blue);
+}
+[data-theme="dark"] .btn-secondary {
+    color: var(--color-gold);
+    border-color: var(--color-gold);
+}
+
+
+.btn-secondary:hover {
+    background-color: var(--color-dark-blue);
+    color: var(--color-white);
+    text-decoration: none;
+}
+[data-theme="dark"] .btn-secondary:hover {
+    background-color: var(--color-gold);
+    color: var(--color-dark-blue);
+}
+
+/* --- 6. Forms --- */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+.form-label {
+    display: block;
+    margin-bottom: var(--spacing-sm);
+    font-weight: 700;
+}
+
+.form-control {
+    width: 100%;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-medium-gray);
+    border-radius: var(--border-radius);
+    background-color: var(--color-white);
+    color: var(--color-text);
+    transition: var(--transition-fast);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-dark-blue);
+    box-shadow: 0 0 0 3px rgba(0, 33, 71, 0.2);
+}
+[data-theme="dark"] .form-control:focus {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
+}
+
+/* --- 7. Header & Navigation --- */
+.main-header {
+    background-color: var(--color-dark-blue);
+    color: var(--color-white);
+    padding: var(--spacing-md) 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--shadow-md);
+}
+
+.main-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-gold);
+}
+.logo:hover { text-decoration: none; }
+
+.main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.main-nav a {
+    color: var(--color-white);
+    font-weight: 500;
+    padding-bottom: var(--spacing-xs);
+    border-bottom: 2px solid transparent;
+}
+
+.main-nav a:hover, .main-nav a.active {
+    color: var(--color-gold);
+    border-bottom-color: var(--color-gold);
+    text-decoration: none;
+}
+
+/* --- 8. Footer --- */
+.main-footer {
+    background-color: var(--color-dark-blue);
+    color: var(--color-light-gray);
+    padding: var(--spacing-xl) 0;
+    margin-top: auto;
+}
+
+.main-footer .container {
+    text-align: center;
+}
+
+/* --- 9. Cards --- */
+.card {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+}
+
+.card__header {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--color-medium-gray);
+    font-weight: 700;
+}
+
+.card__body {
+    padding: var(--spacing-md);
+    flex-grow: 1;
+}
+
+.card__footer {
+    padding: var(--spacing-md);
+    border-top: 1px solid var(--color-medium-gray);
+    background-color: var(--color-light-gray);
+}
+[data-theme="dark"] .card__footer {
+    background-color: #2a2a2a;
+}
+
+/* --- 10. Dashboard specific --- */
+.dashboard {
+    padding: var(--spacing-lg) 0;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+}
+
+/* --- 11. CRM Lead Card --- */
+.lead-card {
+    border-left: 5px solid var(--color-warm);
+}
+.lead-card[data-interest="hot"] { border-left-color: var(--color-hot); }
+.lead-card[data-interest="cold"] { border-left-color: var(--color-cold); }
+
+.lead-card .card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.lead-card__interest-level {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    color: var(--color-white);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+.lead-card__interest-level--hot { background-color: var(--color-hot); }
+.lead-card__interest-level--warm { background-color: var(--color-warm); }
+.lead-card__interest-level--cold { background-color: var(--color-cold); }
+
+/* --- 12. Modal --- */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal.is-visible {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background-color: var(--color-white);
+    margin: auto;
+    padding: var(--spacing-lg);
+    border: 1px solid var(--color-medium-gray);
+    width: 90%;
+    max-width: 500px;
+    border-radius: var(--border-radius);
+    position: relative;
+    animation: fadeIn 0.3s;
+}
+
+.modal-close {
+    color: var(--color-dark-gray);
+    position: absolute;
+    top: var(--spacing-sm);
+    right: var(--spacing-md);
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: var(--color-black);
+}
+
+/* --- 13. Toasts / Notifications --- */
+#toast-container {
+    position: fixed;
+    top: var(--spacing-lg);
+    right: var(--spacing-lg);
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.toast {
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    color: var(--color-white);
+    box-shadow: var(--shadow-md);
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.toast.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast--success { background-color: var(--color-success); }
+.toast--error { background-color: var(--color-error); }
+.toast--info { background-color: var(--color-dark-blue); }
+
+/* --- 14. Animations & Reduced Motion --- */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.fade-in-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.fade-in-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* --- 15. Responsive Design --- */
+@media (max-width: 768px) {
+    .main-nav {
+        /* Add mobile nav logic here, e.g., burger menu */
+        display: none;
+    }
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* --- 20. Tasks Page --- */
+.task-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+.stat-card {
+    background-color: var(--color-white);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+.stat-value {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-dark-blue);
+}
+[data-theme="dark"] .stat-value { color: var(--color-gold); }
+.stat-label {
+    font-size: 0.9rem;
+    color: var(--color-dark-gray);
+}
+.tasks-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+.task-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+}
+.task-item--completed {
+    opacity: 0.6;
+    background-color: #f0f0f0;
+}
+[data-theme="dark"] .task-item--completed {
+    background-color: #2a2a2a;
+}
+.task-item__title {
+    margin-bottom: var(--spacing-xs);
+}
+.task-item__description {
+    font-size: 0.9rem;
+    color: var(--color-dark-gray);
+    margin-bottom: var(--spacing-sm);
+}
+.task-item__xp {
+    font-weight: 700;
+    color: var(--color-dark-green);
+}
+.task-item__actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-shrink: 0;
+    margin-left: var(--spacing-md);
+}
+.task-item__status {
+    font-weight: 700;
+    text-transform: capitalize;
+}
+
+/* --- 21. Learning Hub Page --- */
+.learning-category {
+    margin-bottom: var(--spacing-xl);
+}
+.category-title {
+    font-size: 1.5rem;
+    margin-bottom: var(--spacing-md);
+    border-bottom: 2px solid var(--color-gold);
+    padding-bottom: var(--spacing-sm);
+}
+.module-card {
+    text-decoration: none;
+    color: var(--color-text);
+}
+.module-card--completed {
+    border-left: 5px solid var(--color-success);
+}
+.module-card__title {
+    color: var(--color-dark-blue);
+    margin-bottom: var(--spacing-sm);
+}
+[data-theme="dark"] .module-card__title {
+    color: var(--color-gold);
+}
+.module-card__summary {
+    font-size: 0.9rem;
+    color: var(--color-dark-gray);
+}
+.module-card__progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-medium-gray);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-xs);
+}
+.module-card__progress-value {
+    height: 100%;
+    background-color: var(--color-dark-green);
+    transition: width 0.5s ease-in-out;
+}
+.module-card .card__footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.module-card__status {
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+/* --- 22. Learning Detail Page --- */
+.learning-detail-container .page-header {
+    margin-bottom: var(--spacing-lg);
+}
+#module-content-container {
+    background-color: var(--color-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+}
+.module-title {
+    margin-bottom: var(--spacing-sm);
+}
+.module-category {
+    font-style: italic;
+    color: var(--color-dark-gray);
+    margin-bottom: var(--spacing-lg);
+}
+.module-content {
+    line-height: 1.8;
+}
+.module-content p {
+    margin-bottom: var(--spacing-md);
+}
+.module-video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio */
+    height: 0;
+    overflow: hidden;
+    max-width: 100%;
+    background: #000;
+    margin: var(--spacing-lg) 0;
+}
+.module-video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+.module-attachment {
+    margin-top: var(--spacing-lg);
+}
+.module-actions {
+    margin-top: var(--spacing-lg);
+    text-align: center;
+}
+
+/* --- 16. Top Navigation --- */
+.topnav { background-color: var(--color-white); border-bottom: 1px solid var(--color-medium-gray); padding: var(--spacing-sm) 0; }
+[data-theme="dark"] .topnav { background-color: #222; border-bottom-color: #333; }
+.topnav .container { display: flex; justify-content: space-between; align-items: center; }
+.topnav__left { overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
+.topnav__left::-webkit-scrollbar { display: none; }
+.topnav__links { list-style: none; display: flex; gap: var(--spacing-md); margin: 0; padding: 0; }
+.topnav__links a { color: var(--color-text); font-weight: 500; white-space: nowrap; padding-bottom: var(--spacing-xs); border-bottom: 2px solid transparent; transition: var(--transition-fast); }
+.topnav__links a.active, .topnav__links a:hover { color: var(--color-dark-blue); text-decoration: none; border-bottom-color: var(--color-dark-blue); }
+[data-theme="dark"] .topnav__links a { color: var(--color-dark-gray); }
+[data-theme="dark"] .topnav__links a.active, [data-theme="dark"] .topnav__links a:hover { color: var(--color-gold); border-bottom-color: var(--color-gold); }
+.topnav__right { display: flex; align-items: center; gap: var(--spacing-md); }
+.topnav__welcome { white-space: nowrap; }
+
+.theme-toggle-btn {
+    background: none;
+    border: 2px solid var(--color-gold);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gold);
+    transition: var(--transition-fast);
+}
+.theme-toggle-btn:hover {
+    background-color: var(--color-gold);
+    color: var(--color-dark-blue);
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* --- 17. Authentication Pages --- */
+.auth-page {
+    background: var(--color-light-gray);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+}
+.auth-container {
+    width: 100%;
+    max-width: 450px;
+    padding: var(--spacing-md);
+}
+.auth-card {
+    background: var(--color-white);
+    padding: var(--spacing-xl);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+.auth-title {
+    text-align: center;
+    color: var(--color-dark-blue);
+    margin-bottom: var(--spacing-sm);
+}
+[data-theme="dark"] .auth-title { color: var(--color-gold); }
+.auth-subtitle {
+    text-align: center;
+    color: var(--color-dark-gray);
+    margin-bottom: var(--spacing-lg);
+}
+.btn-block {
+    width: 100%;
+    padding: var(--spacing-md);
+}
+.auth-footer {
+    text-align: center;
+    margin-top: var(--spacing-lg);
+}
+.form-message {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    border-radius: var(--border-radius);
+    border: 1px solid transparent;
+    display: none; /* Hidden by default, shown by JS */
+}
+.form-message.is-visible {
+    display: block;
+}
+.error-message {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.success-message {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+
+/* --- 18. Dashboard --- */
+.dashboard-container { padding-top: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
+.page-title { margin-bottom: var(--spacing-xs); }
+.page-subtitle { margin-bottom: var(--spacing-lg); color: var(--color-dark-gray); }
+.quick-links { margin-bottom: var(--spacing-xl); }
+.quick-link-card { text-decoration: none; color: var(--color-text); }
+.quick-link-card h3 { color: var(--color-dark-blue); }
+[data-theme="dark"] .quick-link-card h3 { color: var(--color-gold); }
+.dashboard-main-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--spacing-lg);
+}
+@media (max-width: 992px) {
+    .dashboard-main-grid { grid-template-columns: 1fr; }
+}
+.dashboard-section {
+    background-color: var(--color-white);
+    padding: var(--spacing-lg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    height: fit-content;
+}
+.subsection-title { margin-bottom: var(--spacing-md); border-bottom: 1px solid var(--color-medium-gray); padding-bottom: var(--spacing-sm); }
+.progress-bar-container { margin-bottom: var(--spacing-md); }
+.progress-bar-container label { display: block; margin-bottom: var(--spacing-sm); font-weight: 500; }
+progress { width: 100%; height: 20px; -webkit-appearance: none; appearance: none; }
+progress::-webkit-progress-bar { background-color: var(--color-medium-gray); border-radius: 5px; }
+progress::-webkit-progress-value { background-color: var(--color-dark-green); border-radius: 5px; transition: width 0.5s ease-in-out; }
+.task-list { display: flex; flex-direction: column; gap: var(--spacing-sm); }
+.ai-mentor-card p { margin: 0; }
+
+/* --- 19. CRM Page --- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+.text-error {
+    color: var(--color-error);
+    font-weight: bold;
+}
+.lead-card__notes {
+    font-size: 0.9rem;
+    color: var(--color-dark-gray);
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.card__footer {
+    display: flex;
+    gap: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--spacing-md);
+}
+.form-group-full {
+    grid-column: 1 / -1;
+}
+@media (max-width: 576px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

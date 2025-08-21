@@ -1,0 +1,106 @@
+# ##############################################################################
+# # ASCLEPIUS WELLNESS - AUTOMATED INCOME SYSTEM .HTACCESS
+# # Author: Jules, Senior Full-Stack Engineer
+# ##############################################################################
+
+# ##############################################################################
+# # REWRITE ENGINE & SECURITY
+# ##############################################################################
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Block access to sensitive files
+    # This is a safeguard; these files should not be in the public root anyway.
+    RewriteRule ^\.(git|env|log|ini|sql)$ - [F,L]
+
+    # Prevent directory listing
+    Options -Indexes
+
+    # Follow symbolic links
+    Options +FollowSymLinks
+</IfModule>
+
+# ##############################################################################
+# # PERFORMANCE: COMPRESSION & CACHING
+# ##############################################################################
+
+<IfModule mod_deflate.c>
+    # Compress HTML, CSS, JavaScript, Text, XML and fonts
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/vnd.ms-fontobject
+    AddOutputFilterByType DEFLATE application/x-font
+    AddOutputFilterByType DEFLATE application/x-font-opentype
+    AddOutputFilterByType DEFLATE application/x-font-truetype
+    AddOutputFilterByType DEFLATE application/x-font-ttf
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE font/opentype
+    AddOutputFilterByType DEFLATE font/otf
+    AddOutputFilterByType DEFLATE font/truetype
+    AddOutputFilterByType DEFLATE image/svg+xml
+    AddOutputFilterByType DEFLATE image/x-icon
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE text/xml
+</IfModule>
+
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType application/font-woff2 "access plus 1 year"
+    ExpiresByType application/font-woff "access plus 1 year"
+</IfModule>
+
+# ##############################################################################
+# # SECURITY HEADERS
+# # Harden the application against common attacks like XSS, clickjacking, etc.
+# ##############################################################################
+
+<IfModule mod_headers.c>
+    # Set security headers
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "DENY"
+    Header set Referrer-Policy "same-origin"
+
+    # HTTP Strict Transport Security (HSTS)
+    # Forces browser to use HTTPS. Only uncomment this after you have successfully
+    # installed an SSL certificate and are sure you can maintain it.
+    # Header set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" env=HTTPS
+
+    # Permissions Policy
+    # Restrict browser features.
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+
+    # ##########################################################################
+    # # CONTENT SECURITY POLICY (CSP)
+    # # This is a critical security layer. It whitelists sources for content.
+    # # IMPORTANT: NO INLINE JAVASCRIPT OR CSS IS ALLOWED.
+    # ##########################################################################
+    Header set Content-Security-Policy "default-src 'self'; img-src 'self' data:; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests;"
+</IfModule>
+
+# ##############################################################################
+# # MIME TYPES
+# # Ensure correct MIME types are served for modern web technologies.
+# ##############################################################################
+
+<IfModule mod_mime.c>
+    AddType application/javascript .js
+    AddType text/css .css
+    AddType application/json .json
+    AddType application/manifest+json .webmanifest
+    AddType image/svg+xml .svg
+    AddType font/woff2 .woff2
+</IfModule>
