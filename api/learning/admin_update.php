@@ -1,21 +1,9 @@
 <?php
-header('Content-Type: application/json');
+require_once __DIR__ . '/../bootstrap.php';
 
-require_once __DIR__ . '/../../../includes/config.php';
-require_once __DIR__ . '/../../../includes/db.php';
-require_once __DIR__ . '/../../../includes/auth.php';
-require_once __DIR__ . '/../../../includes/security.php';
+// Protect this endpoint
+ApiSecurity::protect(['allowed_method' => 'POST', 'role' => 'admin']);
 
-// 1. Start session and check authentication & authorization
-start_secure_session();
-if (!is_logged_in() || !is_otp_verified() || !has_role('admin')) {
-    http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Forbidden: Admin access required.']);
-    exit();
-}
-
-// 2. Verify Request Method and Get Module ID
-verify_request_method('POST'); // Using POST for simplicity, though PUT could also be used.
 $module_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
 if (!$module_id) {

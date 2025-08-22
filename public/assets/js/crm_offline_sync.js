@@ -128,6 +128,7 @@ async function syncQueuedLeads() {
 
     try {
         // The create endpoint is designed to handle an array of leads
+        // apiFetch automatically handles JSON stringification
         const response = await window.apiFetch('/api/crm/lead_create.php', {
             method: 'POST',
             body: queuedLeads
@@ -155,6 +156,7 @@ export async function handleLeadSubmit(leadData) {
     // If online, try to submit directly. If it fails, queue it.
     if (navigator.onLine) {
         try {
+            // apiFetch automatically handles JSON stringification
             const response = await window.apiFetch('/api/crm/lead_create.php', {
                 method: 'POST',
                 body: leadData

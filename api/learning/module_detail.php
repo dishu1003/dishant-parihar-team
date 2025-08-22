@@ -1,11 +1,10 @@
 <?php
-header('Content-Type: application/json');
+require_once __DIR__ . '/../bootstrap.php';
 
-require_once __DIR__ . '/../../includes/config.php';
-require_once __DIR__ . '/../../includes/db.php';
-require_once __DIR__ . '/../../includes/auth.php';
-require_once __DIR__ . '/../../includes/security.php';
+// Protect this endpoint
+ApiSecurity::protect(['allowed_method' => 'GET']);
 
+fix/audit-vulnerabilities-and-issues
 // 1. Start session and check authentication
 start_secure_session();
 if (!is_logged_in() || !is_otp_verified()) {
@@ -17,6 +16,9 @@ if (!is_logged_in() || !is_otp_verified()) {
 // 2. Verify Request Method and get input
 verify_request_method('GET');
 $slug = trim($_GET['slug'] ?? '');
+
+$slug = sanitize_string($_GET['slug'] ?? '');
+feat/initial-project-generation
 
 if (empty($slug)) {
     http_response_code(400);

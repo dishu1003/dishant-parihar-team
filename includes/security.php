@@ -9,6 +9,22 @@
 require_once __DIR__ . '/config.php';
 
 /**
+ fix/audit-vulnerabilities-and-issues
+
+ * Sanitizes a string to prevent XSS.
+ * Removes tags and optionally encodes special characters.
+ *
+ * @param string $input The string to sanitize.
+ * @return string The sanitized string.
+ */
+function sanitize_string(string $input): string {
+    // Using htmlspecialchars is the recommended replacement for the deprecated FILTER_SANITIZE_STRING.
+    // It prevents XSS by encoding characters like < and >.
+    return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ feat/initial-project-generation
  * Sanitizes a string to allow basic HTML tags for content.
  * Be careful with this, as it allows HTML. Use for trusted inputs (e.g., admins).
  *

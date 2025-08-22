@@ -18,7 +18,7 @@ const APP_SHELL_URLS = [
     '/assets/js/pwa.js',
     '/assets/js/ui_components.js',
     '/assets/js/crm_offline_sync.js',
-    '/assets/img/logo.png', // Assuming a logo file
+    // '/assets/img/logo.png', // This file does not exist, removing it to prevent SW installation failure.
     'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap',
     'https://fonts.gstatic.com/s/montserrat/v25/JTUHjIg1_i6t8kCHKm4532VJOt5-Qf8fxjQs.woff2' // Example font file, actual URL may vary
 ];
