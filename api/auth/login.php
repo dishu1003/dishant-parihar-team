@@ -1,21 +1,11 @@
 <?php
-header('Content-Type: application/json');
-
-require_once __DIR__ . '/../../includes/config.php';
-require_once __DIR__ . '/../../includes/db.php';
-require_once __DIR__ . '/../../includes/auth.php';
-require_once __DIR__ . '/../../includes/security.php';
-require_once __DIR__ . '/../../includes/csrf.php';
-require_once __DIR__ . '/../../includes/mail.php';
+require_once __DIR__ . '/bootstrap_auth.php';
+require_once __DIR__ . '/../../includes/mail.php'; // For sending OTP email
 
 // 1. Verify Request Method
-verify_request_method('POST');
+api_verify_request_method('POST');
 
-// 2. Start session and verify CSRF token
-start_secure_session();
-CSRF::verifyRequest();
-
-// 3. Get and sanitize input
+// 2. Get and sanitize input
 $input = json_decode(file_get_contents('php://input'), true);
 $email = filter_var($input['email'] ?? '', FILTER_VALIDATE_EMAIL);
 $password = $input['password'] ?? '';
@@ -26,7 +16,7 @@ if (!$email || empty($password)) {
     exit();
 }
 
-// 4. Attempt to log in the user
+// 3. Attempt to log in the user
 if (login($email, $password)) {
     // Login successful, now handle 2FA (OTP)
     $user = find_user_by_email($email);

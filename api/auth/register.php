@@ -1,20 +1,10 @@
 <?php
-header('Content-Type: application/json');
-
-require_once __DIR__ . '/../../includes/config.php';
-require_once __DIR__ . '/../../includes/db.php';
-require_once __DIR__ . '/../../includes/auth.php';
-require_once __DIR__ . '/../../includes/security.php';
-require_once __DIR__ . '/../../includes/csrf.php';
+require_once __DIR__ . '/bootstrap_auth.php';
 
 // 1. Verify Request Method
-verify_request_method('POST');
+api_verify_request_method('POST');
 
-// 2. Start session and verify CSRF token
-start_secure_session();
-CSRF::verifyRequest();
-
-// 3. Get and sanitize input
+// 2. Get and sanitize input
 $input = json_decode(file_get_contents('php://input'), true);
 
 $name = sanitize_string($input['name'] ?? '');
@@ -23,7 +13,7 @@ $password = $input['password'] ?? '';
 $phone = sanitize_string($input['phone'] ?? '');
 $city = sanitize_string($input['city'] ?? '');
 
-// 4. Validate input
+// 3. Validate input
 if (empty($name) || !$email || empty($password) || empty($phone) || empty($city)) {
     http_response_code(400);
     echo json_encode(['success' => false, 'message' => 'All fields are required.']);
@@ -37,7 +27,7 @@ if (strlen($password) < 8) {
     exit();
 }
 
-// 5. Check if user already exists
+// 4. Check if user already exists
 $pdo = db();
 $stmt = $pdo->prepare("SELECT id FROM users WHERE email = ?");
 $stmt->execute([$email]);
@@ -47,7 +37,7 @@ if ($stmt->fetch()) {
     exit();
 }
 
-// 6. Hash password
+// 5. Hash password
 $password_hash = password_hash($password, PASSWORD_ALGO);
 if ($password_hash === false) {
     error_log("Password hashing failed for registration attempt: {$email}");
@@ -56,7 +46,7 @@ if ($password_hash === false) {
     exit();
 }
 
-// 7. Insert new user into the database
+// 6. Insert new user into the database
 try {
     $is_active = REQUIRE_ADMIN_APPROVAL_FOR_REGISTRATION ? 0 : 1;
 

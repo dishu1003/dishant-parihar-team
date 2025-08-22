@@ -1,21 +1,9 @@
 <?php
-header('Content-Type: application/json');
+require_once __DIR__ . '/../bootstrap.php';
 
-require_once __DIR__ . '/../../../includes/config.php';
-require_once __DIR__ . '/../../../includes/db.php';
-require_once __DIR__ . '/../../../includes/auth.php';
-require_once __DIR__ . '/../../../includes/security.php';
+// Protect this endpoint
+ApiSecurity::protect(['allowed_method' => 'GET', 'role' => 'admin']);
 
-// 1. Start session and check authentication & authorization
-start_secure_session();
-if (!is_logged_in() || !is_otp_verified() || !has_role('admin')) {
-    http_response_code(403);
-    echo json_encode(['success' => false, 'message' => 'Forbidden: Admin access required.']);
-    exit();
-}
-
-// 2. Verify Request Method
-verify_request_method('GET');
 
 // 3. Fetch all users from the database
 try {

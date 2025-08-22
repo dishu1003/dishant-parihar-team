@@ -16,7 +16,9 @@ require_once __DIR__ . '/config.php';
  * @return string The sanitized string.
  */
 function sanitize_string(string $input): string {
-    return filter_var(trim($input), FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+    // Using htmlspecialchars is the recommended replacement for the deprecated FILTER_SANITIZE_STRING.
+    // It prevents XSS by encoding characters like < and >.
+    return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
 }
 
 /**

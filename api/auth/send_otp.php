@@ -1,28 +1,14 @@
 <?php
-header('Content-Type: application/json');
-
-require_once __DIR__ . '/../../includes/config.php';
-require_once __DIR__ . '/../../includes/db.php';
-require_once __DIR__ . '/../../includes/auth.php';
-require_once __DIR__ . '/../../includes/security.php';
-require_once __DIR__ . '/../../includes/csrf.php';
+require_once __DIR__ . '/../bootstrap.php';
 require_once __DIR__ . '/../../includes/mail.php';
 
-// 1. Verify Request Method
-verify_request_method('POST');
+// 1. Protect this endpoint
+ApiSecurity::protect([
+    'require_otp' => false, // User is here to get an OTP, so don't check for it
+    'allowed_method' => 'POST'
+]);
 
-// 2. Start session and verify CSRF
-start_secure_session();
-CSRF::verifyRequest();
-
-// 3. Check if user is logged in
-if (!is_logged_in()) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'You must be logged in to request an OTP.']);
-    exit();
-}
-
-// 4. Rate Limiting
+// 2. Rate Limiting
 $now = time();
 $last_otp_request = $_SESSION['last_otp_request'] ?? 0;
 
@@ -32,11 +18,12 @@ if (($now - $last_otp_request) < 60) { // 60-second cooldown
     exit();
 }
 
-// 5. Generate and send new OTP
+// 3. Generate and send new OTP
 $user_id = get_current_user_id();
 $user = find_user_by_id($user_id);
 
 if (!$user) {
+    // This case should be rare since ApiSecurity::protect checks for login
     http_response_code(404);
     echo json_encode(['success' => false, 'message' => 'User not found.']);
     exit();
