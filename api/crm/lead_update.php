@@ -1,26 +1,10 @@
 <?php
-header('Content-Type: application/json');
+require_once __DIR__ . '/../bootstrap.php';
 
-require_once __DIR__ . '/../../includes/config.php';
-require_once __DIR__ . '/../../includes/db.php';
-require_once __DIR__ . '/../../includes/auth.php';
-require_once __DIR__ . '/../../includes/security.php';
-require_once __DIR__ . '/../../includes/csrf.php';
+// 1. Protect this endpoint
+ApiSecurity::protect(['allowed_method' => 'POST']); // Using POST for simplicity, could also be PUT/PATCH
 
-// 1. Start session, check auth, and verify CSRF
-start_secure_session();
-CSRF::verifyRequest();
-
-if (!is_logged_in() || !is_otp_verified()) {
-    http_response_code(401);
-    echo json_encode(['success' => false, 'message' => 'Authentication required.']);
-    exit();
-}
-
-// 2. Verify Request Method
-verify_request_method('POST'); // Using POST for simplicity, could also be PUT/PATCH
-
-// 3. Get user ID and input payload
+// 2. Get user ID and input payload
 $user_id = get_current_user_id();
 $input = json_decode(file_get_contents('php://input'), true);
 $lead_id = filter_var($input['id'] ?? null, FILTER_VALIDATE_INT);
@@ -31,7 +15,7 @@ if (!$lead_id) {
     exit();
 }
 
-// 4. Verify lead ownership
+// 3. Verify lead ownership
 $pdo = db();
 try {
     $stmt = $pdo->prepare("SELECT id FROM leads WHERE id = :lead_id AND user_id = :user_id");
@@ -48,7 +32,7 @@ try {
     exit();
 }
 
-// 5. Build the dynamic UPDATE query
+// 4. Build the dynamic UPDATE query
 $allowed_fields = ['name', 'mobile', 'city', 'work', 'age', 'meeting_date', 'interest_level', 'notes', 'follow_up_date', 'status'];
 $update_fields = [];
 $params = [':lead_id' => $lead_id, ':user_id' => $user_id];
@@ -77,7 +61,7 @@ if (empty($sql_parts)) {
     exit();
 }
 
-// 6. Execute the update
+// 5. Execute the update
 try {
     $sql = "UPDATE leads SET " . implode(', ', $sql_parts) . ", last_contacted_at = NOW() WHERE id = :lead_id AND user_id = :user_id";
     $stmt = $pdo->prepare($sql);
