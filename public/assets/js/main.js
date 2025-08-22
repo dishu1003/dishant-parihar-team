@@ -127,7 +127,10 @@ function main() {
     // 6. Handle Top Navigation logic (logout, active links)
     handleTopNav();
 
-    // 7. Initialize auth forms if on an auth page
+    // 7. Handle Mobile Navigation Toggle
+    handleMobileNav();
+
+    // 8. Initialize auth forms if on an auth page
     if (document.body.classList.contains('auth-page')) {
         initAuthForms();
     }
@@ -205,6 +208,21 @@ function handleTopNav() {
 
     if (bestMatch) {
         bestMatch.classList.add('active');
+    }
+}
+
+/**
+ * Handles the mobile navigation toggle functionality.
+ */
+function handleMobileNav() {
+    const toggleBtn = document.getElementById('mobile-nav-toggle');
+    const mainNav = document.getElementById('main-nav');
+
+    if (toggleBtn && mainNav) {
+        toggleBtn.addEventListener('click', () => {
+            const isOpen = mainNav.classList.toggle('is-open');
+            toggleBtn.setAttribute('aria-expanded', isOpen);
+        });
     }
 }
 

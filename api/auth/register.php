@@ -17,11 +17,11 @@ CSRF::verifyRequest();
 // 3. Get and sanitize input
 $input = json_decode(file_get_contents('php://input'), true);
 
-$name = sanitize_string($input['name'] ?? '');
+$name = trim($input['name'] ?? '');
 $email = filter_var($input['email'] ?? '', FILTER_VALIDATE_EMAIL);
 $password = $input['password'] ?? '';
-$phone = sanitize_string($input['phone'] ?? '');
-$city = sanitize_string($input['city'] ?? '');
+$phone = trim($input['phone'] ?? '');
+$city = trim($input['city'] ?? '');
 
 // 4. Validate input
 if (empty($name) || !$email || empty($password) || empty($phone) || empty($city)) {

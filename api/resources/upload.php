@@ -31,8 +31,8 @@ try {
     }
 
     $file = $_FILES['resource_file'];
-    $title = sanitize_string($_POST['title'] ?? '');
-    $category = sanitize_string($_POST['category'] ?? '');
+    $title = trim($_POST['title'] ?? '');
+    $category = trim($_POST['category'] ?? '');
 
     if (empty($title) || empty($category)) {
         throw new RuntimeException('Title and category are required.');

@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../../includes/router.php';
 protect_page();
 
 // Get the slug from the URL to pass to our JS
-$slug = isset($_GET['slug']) ? sanitize_string($_GET['slug']) : '';
+$slug = isset($_GET['slug']) ? trim($_GET['slug']) : '';
 
 $page_title = "Learning Module - " . SITE_NAME; // Title will be updated by JS
 $body_class = "learning-detail-page";

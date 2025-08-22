@@ -9,27 +9,47 @@ const tasksContainer = document.getElementById('tasks-list-container');
 let tasksData = [];
 
 /**
+ * Creates a DOM element with given tag, class, and text content.
+ * @param {string} tag - The HTML tag.
+ * @param {string} className - The CSS class name.
+ * @param {string} [textContent] - The text content.
+ * @returns {HTMLElement}
+ */
+function createElement(tag, className, textContent) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (textContent) el.textContent = textContent;
+    return el;
+}
+
+/**
  * Renders a single task item.
  * @param {object} task - The task data object.
- * @returns {string} - The HTML string for the task item.
+ * @returns {HTMLElement} - The DOM element for the task item.
  */
 function renderTask(task) {
     const isCompleted = task.status === 'done' || task.status === 'skipped';
-    return `
-        <div class="task-item card ${isCompleted ? 'task-item--completed' : ''}" data-user-task-id="${task.user_task_id}">
-            <div class="task-item__content">
-                <h3 class="task-item__title">${task.title}</h3>
-                <p class="task-item__description">${task.description}</p>
-                <span class="task-item__xp">${task.xp_reward} XP</span>
-            </div>
-            <div class="task-item__actions">
-                ${!isCompleted ? `
-                    <button class="btn btn-sm btn-success complete-btn">Complete</button>
-                    <button class="btn btn-sm btn-secondary skip-btn">Skip</button>
-                ` : `<span class="task-item__status">${task.status}</span>`}
-            </div>
-        </div>
-    `;
+    const taskItem = createElement('div', `task-item card ${isCompleted ? 'task-item--completed' : ''}`);
+    taskItem.dataset.userTaskId = task.user_task_id;
+
+    const content = createElement('div', 'task-item__content');
+    const titleH3 = createElement('h3', 'task-item__title', task.title);
+    const descriptionP = createElement('p', 'task-item__description', task.description);
+    const xpSpan = createElement('span', 'task-item__xp', `${task.xp_reward} XP`);
+    content.append(titleH3, descriptionP, xpSpan);
+
+    const actions = createElement('div', 'task-item__actions');
+    if (!isCompleted) {
+        const completeBtn = createElement('button', 'btn btn-sm btn-success complete-btn', 'Complete');
+        const skipBtn = createElement('button', 'btn btn-sm btn-secondary skip-btn', 'Skip');
+        actions.append(completeBtn, skipBtn);
+    } else {
+        const statusSpan = createElement('span', 'task-item__status', task.status);
+        actions.appendChild(statusSpan);
+    }
+
+    taskItem.append(content, actions);
+    return taskItem;
 }
 
 /**
@@ -57,7 +77,8 @@ async function fetchAndRenderTasks() {
         tasksData = response.data || [];
 
         if (tasksData.length > 0) {
-            tasksContainer.innerHTML = tasksData.map(renderTask).join('');
+            const taskElements = tasksData.map(renderTask);
+            tasksContainer.replaceChildren(...taskElements);
         } else {
             tasksContainer.innerHTML = '<p>No tasks scheduled for today. Check back tomorrow!</p>';
         }
@@ -97,7 +118,8 @@ function handleTaskActions() {
                         tasksData[taskIndex].status = newStatus;
                         tasksData[taskIndex].points_earned = response.points_earned;
                     }
-                    taskItem.outerHTML = renderTask(tasksData[taskIndex]);
+                    const newTaskItem = renderTask(tasksData[taskIndex]);
+                    taskItem.replaceWith(newTaskItem);
                     updateStats();
                     window.dispatchEvent(new CustomEvent('show-toast', { detail: { message: 'Task updated!', type: 'success' } }));
                 }
