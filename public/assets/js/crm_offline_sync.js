@@ -130,7 +130,7 @@ async function syncQueuedLeads() {
         // The create endpoint is designed to handle an array of leads
         const response = await window.apiFetch('/api/crm/lead_create.php', {
             method: 'POST',
-            body: JSON.stringify(queuedLeads)
+            body: queuedLeads
         });
 
         console.log('Sync successful:', response);
@@ -157,7 +157,7 @@ export async function handleLeadSubmit(leadData) {
         try {
             const response = await window.apiFetch('/api/crm/lead_create.php', {
                 method: 'POST',
-                body: JSON.stringify(leadData)
+                body: leadData
             });
             console.log('Lead created online:', response);
             window.dispatchEvent(new CustomEvent('show-toast', {

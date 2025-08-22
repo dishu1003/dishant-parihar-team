@@ -93,9 +93,6 @@ function displayTips(tips) {
         return;
     }
 
-    // Clear existing tips
-    container.innerHTML = '';
-
     // Display the top 2-3 tips
     const tipsToDisplay = tips.slice(0, 3);
 
@@ -104,18 +101,23 @@ function displayTips(tips) {
         return;
     }
 
-    const tipsHTML = tipsToDisplay.map(tip => `
-        <div class="card ai-mentor-card">
-            <div class="card__body">
-                <p>${tip}</p>
-            </div>
-        </div>
-    `).join('');
+    const title = document.createElement('h3');
+    title.className = 'subsection-title';
+    title.textContent = 'Your AI Mentor Suggests:';
 
-    container.innerHTML = `
-        <h3 class="subsection-title">Your AI Mentor Suggests:</h3>
-        ${tipsHTML}
-    `;
+    const tipElements = tipsToDisplay.map(tipText => {
+        const card = document.createElement('div');
+        card.className = 'card ai-mentor-card';
+        const cardBody = document.createElement('div');
+        cardBody.className = 'card__body';
+        const tipP = document.createElement('p');
+        tipP.textContent = tipText; // Safely set the text
+        cardBody.appendChild(tipP);
+        card.appendChild(cardBody);
+        return card;
+    });
+
+    container.replaceChildren(title, ...tipElements);
 }
 
 

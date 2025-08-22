@@ -56,7 +56,8 @@ $sql_parts = [];
 
 foreach ($allowed_fields as $field) {
     if (isset($input[$field])) {
-        $sanitized_value = sanitize_string($input[$field]); // Basic sanitization
+        // Storing raw input. It will be escaped on output.
+        $sanitized_value = trim($input[$field]);
 
         // More specific validation/formatting
         if (in_array($field, ['meeting_date', 'follow_up_date']) && !empty($sanitized_value)) {

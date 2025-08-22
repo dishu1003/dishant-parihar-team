@@ -16,7 +16,7 @@ if (!is_logged_in() || !is_otp_verified()) {
 
 // 2. Verify Request Method and get input
 verify_request_method('GET');
-$slug = sanitize_string($_GET['slug'] ?? '');
+$slug = trim($_GET['slug'] ?? '');
 
 if (empty($slug)) {
     http_response_code(400);

@@ -24,8 +24,8 @@ verify_request_method('POST');
 $user_id = get_current_user_id();
 $input = json_decode(file_get_contents('php://input'), true);
 
-$title = sanitize_string($input['title'] ?? '');
-$body = sanitize_string($input['body'] ?? ''); // Stripping all tags for security
+$title = trim($input['title'] ?? '');
+$body = trim($input['body'] ?? ''); // Storing raw input, will be escaped on output.
 
 // 4. Validate input
 if (empty($title) || empty($body)) {

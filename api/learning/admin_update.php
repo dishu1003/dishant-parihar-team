@@ -34,9 +34,9 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 }
 
 // 4. Validate and Sanitize Input
-$title = sanitize_string($data['title'] ?? '');
-$category = sanitize_string($data['category'] ?? '');
-$summary = sanitize_string($data['summary'] ?? '');
+$title = trim($data['title'] ?? '');
+$category = trim($data['category'] ?? '');
+$summary = trim($data['summary'] ?? '');
 $content = sanitize_html($data['content'] ?? '');
 $video_url = filter_var($data['video_url'] ?? '', FILTER_SANITIZE_URL);
 $order_no = filter_var($data['order_no'] ?? 0, FILTER_VALIDATE_INT);

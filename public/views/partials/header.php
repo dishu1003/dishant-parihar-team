@@ -21,6 +21,18 @@ $csrf_token = CSRF::getToken() ?? CSRF::generateToken();
     <meta name="description" content="<?php echo isset($page_description) ? e($page_description) : 'The Digital HQ for Asclepius Wellness.'; ?>">
     <meta name="csrf-token" content="<?php echo e($csrf_token); ?>">
 
+    <!-- Social Media Meta Tags (Open Graph & Twitter) -->
+    <meta property="og:title" content="<?php echo isset($page_title) ? e($page_title) : e(SITE_NAME); ?>">
+    <meta property="og:description" content="<?php echo isset($page_description) ? e($page_description) : 'The Digital HQ for Asclepius Wellness.'; ?>">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="<?php echo e(SITE_URL . $_SERVER['REQUEST_URI']); ?>">
+    <!-- <meta property="og:image" content="<?php echo e(SITE_URL); ?>/assets/images/social-preview.jpg"> -->
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?php echo isset($page_title) ? e($page_title) : e(SITE_NAME); ?>">
+    <meta name="twitter:description" content="<?php echo isset($page_description) ? e($page_description) : 'The Digital HQ for Asclepius Wellness.'; ?>">
+    <!-- <meta name="twitter:image" content="<?php echo e(SITE_URL); ?>/assets/images/social-preview.jpg"> -->
+
     <!-- PWA & Theme -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#002147">
@@ -42,7 +54,7 @@ $csrf_token = CSRF::getToken() ?? CSRF::generateToken();
     <header class="main-header">
         <div class="container">
             <a href="/" class="logo"><?php echo e(SITE_NAME); ?></a>
-            <nav class="main-nav">
+            <nav class="main-nav" id="main-nav">
                 <?php if (is_logged_in() && is_otp_verified()): ?>
                     <!-- Logged-in navigation is handled by topnav.php -->
                 <?php else: ?>
@@ -52,7 +64,12 @@ $csrf_token = CSRF::getToken() ?? CSRF::generateToken();
                     </ul>
                 <?php endif; ?>
             </nav>
-            <!-- Mobile nav toggle can be added here -->
+            <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Open navigation menu" aria-controls="main-nav" aria-expanded="false">
+                <span class="sr-only">Menu</span>
+                <span class="hamburger-box">
+                    <span class="hamburger-inner"></span>
+                </span>
+            </button>
         </div>
     </header>
 

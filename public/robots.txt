@@ -1,0 +1,10 @@
+# Allow all web crawlers
+User-agent: *
+Allow: /
+
+# Disallow crawling of backend directories as a safeguard
+Disallow: /api/
+Disallow: /includes/
+
+# Point to the sitemap
+Sitemap: /sitemap.xml

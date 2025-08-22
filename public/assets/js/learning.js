@@ -7,26 +7,44 @@
 const modulesContainer = document.getElementById('learning-modules-container');
 
 /**
+ * Creates a DOM element with given tag, class, and text content.
+ * @param {string} tag - The HTML tag.
+ * @param {string} className - The CSS class name.
+ * @param {string} [textContent] - The text content.
+ * @returns {HTMLElement}
+ */
+function createElement(tag, className, textContent) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (textContent) el.textContent = textContent;
+    return el;
+}
+
+/**
  * Renders a single learning module card.
  * @param {object} module - The module data object.
- * @returns {string} - The HTML string for the module card.
+ * @returns {HTMLElement} - The DOM element for the module card.
  */
 function renderModuleCard(module) {
     const isCompleted = module.status === 'completed';
-    return `
-        <a href="learning_detail.php?slug=${module.slug}" class="card module-card ${isCompleted ? 'module-card--completed' : ''}">
-            <div class="card__body">
-                <h3 class="module-card__title">${module.title}</h3>
-                <p class="module-card__summary">${module.summary || ''}</p>
-            </div>
-            <div class="card__footer">
-                <div class="module-card__progress-bar">
-                    <div class="module-card__progress-value" style="width: ${module.progress}%;"></div>
-                </div>
-                <span class="module-card__status">${isCompleted ? 'Completed' : `${module.progress}%`}</span>
-            </div>
-        </a>
-    `;
+    const cardLink = createElement('a', `card module-card ${isCompleted ? 'module-card--completed' : ''}`);
+    cardLink.href = `learning_detail.php?slug=${module.slug}`;
+
+    const body = createElement('div', 'card__body');
+    const titleH3 = createElement('h3', 'module-card__title', module.title);
+    const summaryP = createElement('p', 'module-card__summary', module.summary || '');
+    body.append(titleH3, summaryP);
+
+    const footer = createElement('div', 'card__footer');
+    const progressBar = createElement('div', 'module-card__progress-bar');
+    const progressValue = createElement('div', 'module-card__progress-value');
+    progressValue.style.width = `${module.progress}%`;
+    progressBar.appendChild(progressValue);
+    const statusSpan = createElement('span', 'module-card__status', isCompleted ? 'Completed' : `${module.progress}%`);
+    footer.append(progressBar, statusSpan);
+
+    cardLink.append(body, footer);
+    return cardLink;
 }
 
 /**
@@ -39,20 +57,21 @@ async function fetchAndRenderModules() {
     try {
         const response = await window.apiFetch('/api/learning/modules_list.php');
         const categories = response.data || {};
+        const fragments = [];
 
         if (Object.keys(categories).length > 0) {
-            let html = '';
-            for (const category in categories) {
-                html += `
-                    <section class="learning-category">
-                        <h2 class="category-title">${category}</h2>
-                        <div class="grid-container">
-                            ${categories[category].map(renderModuleCard).join('')}
-                        </div>
-                    </section>
-                `;
+            for (const categoryName in categories) {
+                const section = createElement('section', 'learning-category');
+                const titleH2 = createElement('h2', 'category-title', categoryName);
+                const grid = createElement('div', 'grid-container');
+
+                const moduleElements = categories[categoryName].map(renderModuleCard);
+                grid.append(...moduleElements);
+
+                section.append(titleH2, grid);
+                fragments.push(section);
             }
-            modulesContainer.innerHTML = html;
+            modulesContainer.replaceChildren(...fragments);
         } else {
             modulesContainer.innerHTML = '<p>No learning modules are available at this time.</p>';
         }
