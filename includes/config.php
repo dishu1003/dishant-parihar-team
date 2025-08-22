@@ -7,21 +7,23 @@
  */
 
 // --- ERROR REPORTING ---
-// Set to 0 in production to avoid leaking server info. Set to E_ALL for development.
-error_reporting(E_ALL);
-ini_set('display_errors', 1); // Set to 0 in production
+// In production, this should be 0 to avoid leaking server info. Errors should be logged to a file.
+error_reporting(0);
+ini_set('display_errors', 0);
 
 // --- SITE CONFIGURATION ---
 // IMPORTANT: Use https:// for production. This URL is used for generating absolute links.
-define('SITE_URL', 'http://localhost/automated-income-system/public'); // Example: https://team.yourdomain.com
+define('SITE_URL', getenv('SITE_URL') ?: 'http://localhost/automated-income-system/public'); // Example: https://team.yourdomain.com
 define('SITE_NAME', 'Asclepius Wellness HQ');
 
 // --- DATABASE CONFIGURATION ---
-// Credentials for the MySQL database connection.
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'asclepius_ais'); // Placeholder, change to your DB name
-define('DB_USER', 'root'); // Placeholder, change to your DB user
-define('DB_PASS', ''); // Placeholder, change to your DB password
+// It is strongly recommended to use environment variables for sensitive data.
+// In your hosting (e.g., Hostinger hPanel), you can set these variables.
+// Example: DB_HOST=localhost, DB_NAME=u12345_dbname, DB_USER=u12345_user, DB_PASS=YourStrongPassword
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_NAME', getenv('DB_NAME') ?: 'asclepius_ais');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: '');
 define('DB_CHARSET', 'utf8mb4');
 
 // --- AUTHENTICATION & SESSION ---
@@ -57,5 +59,7 @@ define('REQUIRE_ADMIN_APPROVAL_FOR_REGISTRATION', false);
 date_default_timezone_set('Asia/Kolkata');
 
 // --- SECURITY ---
-// A secret key for hashing or other security-related functions. Change this to a long, random string.
-define('APP_SECRET_KEY', 'def1$ec@d418a7*!ABC123XYZ');
+// A secret key for hashing or other security-related functions.
+// This MUST be a long, random string. Set this as an environment variable.
+// You can generate a suitable key using: openssl rand -hex 32
+define('APP_SECRET_KEY', getenv('APP_SECRET_KEY') ?: 'default-insecure-key-change-me');

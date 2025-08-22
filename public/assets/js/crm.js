@@ -11,35 +11,73 @@ const addLeadModal = document.getElementById('add-lead-modal');
 const addLeadForm = document.getElementById('add-lead-form');
 
 /**
+ * Creates a DOM element with given tag, class, and text content.
+ * @param {string} tag - The HTML tag.
+ * @param {string} className - The CSS class name.
+ * @param {string} [textContent] - The text content.
+ * @returns {HTMLElement}
+ */
+function createElement(tag, className, textContent) {
+    const el = document.createElement(tag);
+    el.className = className;
+    if (textContent) {
+        el.textContent = textContent;
+    }
+    return el;
+}
+
+/**
  * Renders a single lead card.
  * @param {object} lead - The lead data object.
- * @returns {string} - The HTML string for the lead card.
+ * @returns {HTMLElement} - The DOM element for the lead card.
  */
 function renderLeadCard(lead) {
+    const card = createElement('div', 'card lead-card');
+    card.dataset.leadId = lead.id;
+    card.dataset.interest = lead.interest_level;
+
+    // --- Header ---
+    const header = createElement('div', 'card__header');
+    const nameH3 = createElement('h3', 'lead-card__name', lead.name);
+    const interestSpan = createElement('span', `lead-card__interest-level lead-card__interest-level--${lead.interest_level}`, lead.interest_level);
+    header.append(nameH3, interestSpan);
+
+    // --- Body ---
+    const body = createElement('div', 'card__body');
     const followUpDate = lead.follow_up_date ? new Date(lead.follow_up_date) : null;
     const isOverdue = followUpDate && followUpDate < new Date();
     const formattedFollowUp = followUpDate ? followUpDate.toLocaleDateString() : 'N/A';
-    const whatsappLink = `https://wa.me/${lead.mobile.replace(/\D/g, '')}?text=Hi%20${encodeURIComponent(lead.name)},%20...`;
 
-    return `
-        <div class="card lead-card" data-lead-id="${lead.id}" data-interest="${lead.interest_level}">
-            <div class="card__header">
-                <h3 class="lead-card__name">${lead.name}</h3>
-                <span class="lead-card__interest-level lead-card__interest-level--${lead.interest_level}">${lead.interest_level}</span>
-            </div>
-            <div class="card__body">
-                <p><strong>Mobile:</strong> <a href="tel:${lead.mobile}">${lead.mobile}</a></p>
-                <p><strong>City:</strong> ${lead.city || 'N/A'}</p>
-                <p><strong>Follow-up:</strong> <span class="${isOverdue ? 'text-error' : ''}">${formattedFollowUp}</span></p>
-                <p class="lead-card__notes"><strong>Notes:</strong> ${lead.notes || 'No notes yet.'}</p>
-            </div>
-            <div class="card__footer">
-                <a href="${whatsappLink}" target="_blank" class="btn btn-sm btn-success">WhatsApp</a>
-                <button class="btn btn-sm btn-secondary edit-btn">Edit</button>
-                <button class="btn btn-sm btn-danger delete-btn">Delete</button>
-            </div>
-        </div>
-    `;
+    // Using innerHTML for simple, safe content (strong tags).
+    const mobileP = document.createElement('p');
+    mobileP.innerHTML = `<strong>Mobile:</strong> <a href="tel:${lead.mobile}">${lead.mobile}</a>`;
+
+    const cityP = createElement('p');
+    cityP.innerHTML = `<strong>City:</strong> ${lead.city || 'N/A'}`;
+
+    const followupP = createElement('p');
+    const followupSpan = createElement('span', isOverdue ? 'text-error' : '', formattedFollowUp);
+    followupP.innerHTML = '<strong>Follow-up:</strong> ';
+    followupP.appendChild(followupSpan);
+
+    const notesP = createElement('p', 'lead-card__notes');
+    notesP.innerHTML = '<strong>Notes:</strong> ';
+    notesP.append(lead.notes || 'No notes yet.'); // Using append() which treats strings as text
+
+    body.append(mobileP, cityP, followupP, notesP);
+
+    // --- Footer ---
+    const footer = createElement('div', 'card__footer');
+    const whatsappLink = `https://wa.me/${lead.mobile.replace(/\D/g, '')}?text=Hi%20${encodeURIComponent(lead.name)},%20...`;
+    const whatsappBtn = createElement('a', 'btn btn-sm btn-success', 'WhatsApp');
+    whatsappBtn.href = whatsappLink;
+    whatsappBtn.target = '_blank';
+    const editBtn = createElement('button', 'btn btn-sm btn-secondary edit-btn', 'Edit');
+    const deleteBtn = createElement('button', 'btn btn-sm btn-danger delete-btn', 'Delete');
+    footer.append(whatsappBtn, editBtn, deleteBtn);
+
+    card.append(header, body, footer);
+    return card;
 }
 
 /**
@@ -52,7 +90,8 @@ async function fetchAndRenderLeads() {
     try {
         const response = await window.apiFetch('/api/crm/leads_list.php');
         if (response.data && response.data.length > 0) {
-            leadsContainer.innerHTML = response.data.map(renderLeadCard).join('');
+            const leadElements = response.data.map(renderLeadCard);
+            leadsContainer.replaceChildren(...leadElements); // Use replaceChildren for performance
         } else {
             leadsContainer.innerHTML = '<p>You have no leads yet. Click "Add New Lead" to get started!</p>';
         }

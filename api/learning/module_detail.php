@@ -4,7 +4,21 @@ require_once __DIR__ . '/../bootstrap.php';
 // Protect this endpoint
 ApiSecurity::protect(['allowed_method' => 'GET']);
 
+fix/audit-vulnerabilities-and-issues
+// 1. Start session and check authentication
+start_secure_session();
+if (!is_logged_in() || !is_otp_verified()) {
+    http_response_code(401);
+    echo json_encode(['success' => false, 'message' => 'Authentication required.']);
+    exit();
+}
+
+// 2. Verify Request Method and get input
+verify_request_method('GET');
+$slug = trim($_GET['slug'] ?? '');
+
 $slug = sanitize_string($_GET['slug'] ?? '');
+feat/initial-project-generation
 
 if (empty($slug)) {
     http_response_code(400);

@@ -30,9 +30,9 @@ try {
     $stmt = $pdo->prepare($sql);
 
     foreach ($leads_to_create as $index => $lead) {
-        // Sanitize and validate each lead
-        $name = sanitize_string($lead['name'] ?? '');
-        $mobile = sanitize_string($lead['mobile'] ?? '');
+        // Store raw input, escaping will be handled on output.
+        $name = trim($lead['name'] ?? '');
+        $mobile = trim($lead['mobile'] ?? '');
 
         if (empty($name) || empty($mobile)) {
             $errors[] = "Lead at index {$index} is missing a name or mobile number.";
@@ -43,12 +43,12 @@ try {
             ':user_id' => $user_id,
             ':name' => $name,
             ':mobile' => $mobile,
-            ':city' => sanitize_string($lead['city'] ?? null),
-            ':work' => sanitize_string($lead['work'] ?? null),
+            ':city' => isset($lead['city']) ? trim($lead['city']) : null,
+            ':work' => isset($lead['work']) ? trim($lead['work']) : null,
             ':age' => filter_var($lead['age'] ?? null, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 150]]) ?: null,
             ':meeting_date' => !empty($lead['meeting_date']) ? date('Y-m-d', strtotime($lead['meeting_date'])) : null,
             ':interest_level' => in_array($lead['interest_level'], ['hot', 'warm', 'cold']) ? $lead['interest_level'] : 'warm',
-            ':notes' => sanitize_string($lead['notes'] ?? null),
+            ':notes' => isset($lead['notes']) ? trim($lead['notes']) : null,
             ':follow_up_date' => !empty($lead['follow_up_date']) ? date('Y-m-d', strtotime($lead['follow_up_date'])) : null
         ]);
         $created_count++;

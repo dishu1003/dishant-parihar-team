@@ -9,6 +9,8 @@
 require_once __DIR__ . '/config.php';
 
 /**
+ fix/audit-vulnerabilities-and-issues
+
  * Sanitizes a string to prevent XSS.
  * Removes tags and optionally encodes special characters.
  *
@@ -22,6 +24,7 @@ function sanitize_string(string $input): string {
 }
 
 /**
+ feat/initial-project-generation
  * Sanitizes a string to allow basic HTML tags for content.
  * Be careful with this, as it allows HTML. Use for trusted inputs (e.g., admins).
  *

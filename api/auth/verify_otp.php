@@ -9,7 +9,7 @@ ApiSecurity::protect([
 
 // 2. Get and sanitize input
 $input = json_decode(file_get_contents('php://input'), true);
-$otp = sanitize_string($input['otp'] ?? '');
+$otp = $input['otp'] ?? '';
 
 if (empty($otp) || !ctype_digit($otp) || strlen($otp) !== 6) {
     http_response_code(400);

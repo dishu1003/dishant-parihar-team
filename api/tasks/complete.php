@@ -9,7 +9,7 @@ ApiSecurity::protect(['allowed_method' => 'POST']);
 $user_id = get_current_user_id();
 $input = json_decode(file_get_contents('php://input'), true);
 $user_task_id = filter_var($input['user_task_id'] ?? null, FILTER_VALIDATE_INT);
-$status = sanitize_string($input['status'] ?? '');
+$status = $input['status'] ?? '';
 
 if (!$user_task_id || !in_array($status, ['done', 'skipped'])) {
     http_response_code(400);
