@@ -29,17 +29,13 @@ define('DB_CHARSET', 'utf8mb4');
 // --- AUTHENTICATION & SESSION ---
 define('SESSION_LIFETIME', 1800); // Session lifetime in seconds (30 minutes)
 define('SESSION_NAME', 'ASCLEPIUS_SESSID');
-define('PASSWORD_ALGO', PASSWORD_BCRYPT); // Algorithm for password hashing
+define('PASSWORD_ALGO', PASSWORD_ARGON2ID); // Algorithm for password hashing
 define('OTP_LIFETIME', 600); // OTP validity in seconds (10 minutes)
 
 // --- EMAIL CONFIGURATION ---
 // This email address must be a valid sender on your hosting account (e.g., created in hPanel).
 define('EMAIL_FROM', 'no-reply@asclepius.local');
 define('EMAIL_FROM_NAME', 'Asclepius Wellness HQ');
-
-// For development, force email simulation to prevent errors if a mail server isn't configured.
-// The simulated email content will be written to the PHP error log.
-define('FORCE_EMAIL_SIMULATION', true);
 
 // --- FILE UPLOADS ---
 // IMPORTANT: This path should ideally be OUTSIDE the public web root for security.

@@ -34,17 +34,6 @@ function send_email(string $to, string $subject, string $message, array $headers
 
     // mail() can be unreliable on local dev environments (like XAMPP) without configuration.
     // It is expected to work on live servers like Hostinger.
-
-    // Simulate email sending if simulation is forced by config.
-    if (defined('FORCE_EMAIL_SIMULATION') && FORCE_EMAIL_SIMULATION === true) {
-        error_log("--- EMAIL SIMULATION (Forced by Config) ---");
-        error_log("To: $to");
-        error_log("Subject: $subject");
-        error_log("Body: $message");
-        error_log("--- END EMAIL SIMULATION ---");
-        return true; // Simulate success
-    }
-
     return mail($to, $subject, $message, $header_string);
 }
 

@@ -88,10 +88,12 @@ class CSRF {
      */
     public static function verifyRequest(): void {
         $token = $_POST[self::$token_name] ?? '';
+
         if (empty($token)) {
-            // Also check headers for AJAX requests
-            $headers = getallheaders();
-            $token = $headers['X-CSRF-Token'] ?? '';
+            // For AJAX requests, the token is sent in a header.
+            // The header name is 'X-CSRF-Token', which PHP makes available as
+            // $_SERVER['HTTP_X_CSRF_TOKEN']. This is more reliable than getallheaders().
+            $token = $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
         }
 
         if (!self::validateToken($token)) {
