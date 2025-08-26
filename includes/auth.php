@@ -28,7 +28,7 @@ function start_secure_session(): void {
             'domain' => $domain,
             'secure' => isset($_SERVER['HTTPS']), // Only send cookies over HTTPS
             'httponly' => true, // Prevent client-side script access
-            'samesite' => 'Strict' // Prevent CSRF
+            'samesite' => 'Lax' // Prevent CSRF
         ];
         session_set_cookie_params($cookieParams);
         session_name(SESSION_NAME);
