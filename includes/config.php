@@ -37,6 +37,10 @@ define('OTP_LIFETIME', 600); // OTP validity in seconds (10 minutes)
 define('EMAIL_FROM', 'no-reply@asclepius.local');
 define('EMAIL_FROM_NAME', 'Asclepius Wellness HQ');
 
+// For development, force email simulation to prevent errors if a mail server isn't configured.
+// The simulated email content will be written to the PHP error log.
+define('FORCE_EMAIL_SIMULATION', true);
+
 // --- FILE UPLOADS ---
 // IMPORTANT: This path should ideally be OUTSIDE the public web root for security.
 // If using a shared host like Hostinger, you might create a directory parallel to 'public_html'.
