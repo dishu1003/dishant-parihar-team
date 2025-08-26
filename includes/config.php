@@ -29,7 +29,7 @@ define('DB_CHARSET', 'utf8mb4');
 // --- AUTHENTICATION & SESSION ---
 define('SESSION_LIFETIME', 1800); // Session lifetime in seconds (30 minutes)
 define('SESSION_NAME', 'ASCLEPIUS_SESSID');
-define('PASSWORD_ALGO', PASSWORD_ARGON2ID); // Algorithm for password hashing
+define('PASSWORD_ALGO', PASSWORD_BCRYPT); // Algorithm for password hashing
 define('OTP_LIFETIME', 600); // OTP validity in seconds (10 minutes)
 
 // --- EMAIL CONFIGURATION ---
