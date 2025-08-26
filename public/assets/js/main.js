@@ -51,7 +51,7 @@ async function apiFetch(url, options = {}) {
         if (!response.ok) {
             // Try to parse error message from server, otherwise use status text
             const errorData = await response.json().catch(() => null);
-            const errorMessage = errorData?.message || response.statusText;
+            const errorMessage = errorData?.message || errorData?.error || response.statusText;
             throw new Error(errorMessage);
         }
         return response.json();

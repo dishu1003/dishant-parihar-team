@@ -15,10 +15,17 @@ require_once __DIR__ . '/security.php';
  */
 function start_secure_session(): void {
     if (session_status() === PHP_SESSION_NONE) {
+        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
+        // Remove port number from host, if present.
+        $host = preg_replace('/:\d+$/', '', $host);
+        // Prepending a dot is a common practice for cross-subdomain compatibility.
+        // For 'localhost', we don't set a domain attribute.
+        $domain = ($host !== 'localhost') ? '.' . $host : '';
+
         $cookieParams = [
             'lifetime' => SESSION_LIFETIME,
             'path' => '/',
-            'domain' => '', // Set your domain in production for subdomains
+            'domain' => $domain,
             'secure' => isset($_SERVER['HTTPS']), // Only send cookies over HTTPS
             'httponly' => true, // Prevent client-side script access
             'samesite' => 'Strict' // Prevent CSRF
